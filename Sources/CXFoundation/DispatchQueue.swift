@@ -1,41 +1,7 @@
 import CombineX
 import Dispatch
-
-#if !COCOAPODS
 import CXNamespace
 import CXUtility
-#endif
-
-extension CXWrappers {
-    
-    #if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
-    
-    public final class DispatchQueue: NSObject<Dispatch.DispatchQueue> {}
-    
-    #else
-    
-    public final class DispatchQueue: CXWrapper {
-        
-        public typealias Base = Dispatch.DispatchQueue
-        
-        public let base: Base
-        
-        public init(wrapping base: Base) {
-            self.base = base
-        }
-    }
-    
-    #endif
-}
-
-extension DispatchQueue {
-    
-    public typealias CX = CXWrappers.DispatchQueue
-    
-    public var cx: CXWrappers.DispatchQueue {
-        return CXWrappers.DispatchQueue(wrapping: self)
-    }
-}
 
 // Adapted from the original file:
 // https://github.com/apple/swift/blob/main/stdlib/public/Darwin/Dispatch/Schedulers%2BDispatchQueue.swift
@@ -96,7 +62,7 @@ private extension DispatchTime /* : Strideable */ {
     }
 }
 
-extension CXWrappers.DispatchQueue: CombineX.Scheduler {
+extension DispatchQueue: CombineX.Scheduler {
     /// The scheduler time type used by the dispatch queue.
     public struct SchedulerTimeType: Strideable, Codable, Hashable {
         /// The dispatch time represented by this type.
